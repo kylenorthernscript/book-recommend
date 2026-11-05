@@ -1,0 +1,23 @@
+/* Bulmaのテーマ変数を上書きして、生成りとテラコッタの配色にする。 */
+:root {
+  --bulma-scheme-h: 38;
+  --bulma-scheme-s: 35%;
+  --bulma-scheme-main-l: 99%;
+  --bulma-body-background-color: hsl(40, 58%, 94%);
+
+  --bulma-text-h: 26;
+  --bulma-text-s: 24%;
+  --bulma-text-l: 30%;
+  --bulma-text-strong-l: 24%;
+  --bulma-text-weak-l: 42%;
+
+  --bulma-primary-h: 16deg;
+  --bulma-primary-s: 52%;
+  --bulma-primary-l: 46%;
+  --bulma-primary-invert-l: 100%;
+
+  --bulma-family-primary: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+  --bulma-radius: 0.75rem;
+  --bulma-radius-large: 1.25rem;
+  --bulma-shadow: 0 0.75rem 2rem -0.75rem hsla(25, 45%, 40%, 0.28);
+}

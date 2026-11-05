@@ -1,0 +1,32 @@
+{
+  "name": "book-recommend",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "はい・いいえの5問で、20冊から1冊を推薦する読書診断",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "test": "vitest run",
+    "typecheck": "nuxt typecheck"
+  },
+  "packageManager": "pnpm@10.12.4",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "dependencies": {
+    "bulma": "^1.0.4",
+    "nuxt": "^4.6.4",
+    "vue": "^3.5.45"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.0",
+    "vue-tsc": "^3.3.14"
+  }
+}
