@@ -2,6 +2,22 @@
 
 `reading-list-20.md` の20冊から、はい・いいえの5問で1冊を推薦する診断アプリ。Nuxt、Bulma、pnpm を使い、Netlifyで公開する。
 
+## 現在の状況
+
+2026-11-06時点。最新の経緯は `prompts/` の末尾を読む。
+
+- 公開済み：GitHub（https://github.com/kylenorthernscript/book-recommend、Public）とNetlify。NetlifyのサイトURLはこのファイルに未記録。
+- タグ：`prototype` は `ac14811`。動かさない。
+- 次の作業は未定。OpenSpecは初期化済みで、変更提案はまだない。
+- ライセンスはMITで、読書記録を含むリポジトリ全体に適用する。
+
+## 開発環境
+
+- `nvm use` でNode 24系に切り替えてから作業する。24.2.0はNuxtの対応範囲外。
+- 確認は `pnpm test`、`pnpm typecheck`、`pnpm generate`。
+- Netlifyでは出力先が `dist` になる（手元の `dist` は `.output/public` へのリンク）。公開の設定を変えるときは、`CI=true NETLIFY=true` でクリーンな複製をビルドして確かめる。
+- このリポジトリの `user.email` はGitHubのnoreplyアドレス。Gmailをコミットに出さない。
+
 ## デザイン
 
 ライト表示に固定する（Bulmaの `bulma-no-dark-mode` 版を使う）。配色と書体は `app/assets/css/theme.css` のBulmaテーマ変数で調整する。
@@ -17,6 +33,8 @@
 ## プロンプトの記録
 
 ユーザーが入力したプロンプトを、`prompts/` に連番のファイルとして原文のまま追加する。秘密情報は `[REDACTED]` に置き換える。
+
+入力ごとに必ず追加する。記録ファイルもコミットの対象なので、ユーザーに頼まれるまでコミットしない。
 
 ## ネタバレの禁止
 
