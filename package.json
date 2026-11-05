@@ -4,6 +4,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "はい・いいえの5問で、20冊から1冊を推薦する読書診断",
+  "license": "MIT",
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
