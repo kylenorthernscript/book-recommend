@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { books } from '../app/data/books'
 import { questions } from '../app/data/questions'
-import { recommend, scoreBook } from '../app/utils/scoring'
+import { recommendations, scoreBook } from '../app/utils/scoring'
 
 const allAnswers = Array.from({ length: 2 ** questions.length }, (_, pattern) =>
   questions.map((_, index) => Boolean(pattern & (1 << index))),
@@ -27,17 +27,17 @@ describe('データ', () => {
   })
 })
 
-describe('recommend', () => {
+describe('recommendations', () => {
   it('はい・いいえの符号どおりに答えると、その本が選ばれる', () => {
     for (const book of books) {
-      expect(recommend(books, book.scores.map((score) => score > 0)).id).toBe(book.id)
+      expect(recommendations(books, book.scores.map((score) => score > 0))[0]!.id).toBe(book.id)
     }
   })
 
   it('全冊がいずれかの回答で選ばれ、1冊に偏らない', () => {
     const counts = new Map<number, number>()
     for (const answers of allAnswers) {
-      const { id } = recommend(books, answers)
+      const { id } = recommendations(books, answers)[0]!
       counts.set(id, (counts.get(id) ?? 0) + 1)
     }
     expect(counts.size).toBe(books.length)
@@ -46,13 +46,13 @@ describe('recommend', () => {
 
   it('後味の悪さを望まない人に、方舟と告白を推薦しない', () => {
     for (const answers of allAnswers.filter((a) => !a[bitterQuestion])) {
-      expect(['方舟', '告白']).not.toContain(recommend(books, answers).title)
+      expect(['方舟', '告白']).not.toContain(recommendations(books, answers)[0]!.title)
     }
   })
 
   it('回答と強く矛盾する本を推薦しない', () => {
     for (const answers of allAnswers) {
-      const { scores } = recommend(books, answers)
+      const { scores } = recommendations(books, answers)[0]!
       answers.forEach((yes, index) => {
         expect(yes ? scores[index] : -scores[index]!).toBeGreaterThan(-2)
       })
@@ -62,9 +62,61 @@ describe('recommend', () => {
   it('同点のときは一覧で先にある本を選ぶ', () => {
     const [first, second] = books
     const tied = [first!, { ...second!, scores: first!.scores }]
-    const answers = questions.map(() => true)
+    const answers = first!.scores.map((score) => score > 0)
     expect(scoreBook(tied[0]!, answers)).toBe(scoreBook(tied[1]!, answers))
-    expect(recommend(tied, answers).id).toBe(first!.id)
+    expect(recommendations(tied, answers)[0]!.id).toBe(first!.id)
+  })
+
+  it('どの回答にも候補が1冊以上ある', () => {
+    for (const answers of allAnswers) {
+      expect(recommendations(books, answers).length).toBeGreaterThanOrEqual(1)
+    }
+  })
+
+  it('次点以降も回答と強く矛盾しない', () => {
+    for (const answers of allAnswers) {
+      for (const { scores } of recommendations(books, answers)) {
+        answers.forEach((yes, index) => {
+          expect(yes ? scores[index] : -scores[index]!).toBeGreaterThan(-2)
+        })
+      }
+    }
+  })
+
+  it('後味の悪さを望まない人の候補に、方舟と告白を含めない', () => {
+    for (const answers of allAnswers.filter((a) => !a[bitterQuestion])) {
+      const titles = recommendations(books, answers).map((book) => book.title)
+      expect(titles).not.toContain('方舟')
+      expect(titles).not.toContain('告白')
+    }
+  })
+
+  it('候補は点の高い順に並ぶ', () => {
+    for (const answers of allAnswers) {
+      const points = recommendations(books, answers).map((book) => scoreBook(book, answers))
+      expect(points).toEqual(points.toSorted((a, b) => b - a))
+    }
+  })
+
+  it('全問「はい」の候補は地雷グリコの1冊のみ', () => {
+    const titles = recommendations(books, questions.map(() => true)).map((book) => book.title)
+    expect(titles).toEqual(['地雷グリコ'])
+  })
+
+  it('回答と逆向きの配点が -1 や 1 だけの本は除かない', () => {
+    const book = books[0]!
+    const yesBook = { ...book, scores: [2, 2, 2, 1, -1] as const }
+    const noBook = { ...book, scores: [-2, -2, -2, -1, 1] as const }
+    expect(recommendations([yesBook], questions.map(() => true))).toEqual([yesBook])
+    expect(recommendations([noBook], questions.map(() => false))).toEqual([noBook])
+  })
+
+  it('回答と逆向きの配点が -2 や 2 の本は除く', () => {
+    const book = books[0]!
+    const yesBook = { ...book, scores: [2, 2, 1, 1, -2] as const }
+    const noBook = { ...book, scores: [-2, -2, -1, -1, 2] as const }
+    expect(recommendations([yesBook], questions.map(() => true))).toEqual([])
+    expect(recommendations([noBook], questions.map(() => false))).toEqual([])
   })
 })
 

@@ -7,9 +7,13 @@ export function scoreBook(book: Book, answers: readonly boolean[]): number {
   )
 }
 
-/** 最高点の1冊を返す。同点のときは一覧で先にある本を選ぶ。 */
-export function recommend(books: readonly Book[], answers: readonly boolean[]): Book {
-  return books.reduce((best, book) =>
-    scoreBook(book, answers) > scoreBook(best, answers) ? book : best,
-  )
+function contradicts(book: Book, answers: readonly boolean[]): boolean {
+  return answers.some((yes, index) => (yes ? book.scores[index]! : -book.scores[index]!) <= -2)
+}
+
+/** 回答と強く矛盾しない本を、点の高い順に返す。同点のときは一覧で先にある本を先にする。 */
+export function recommendations(books: readonly Book[], answers: readonly boolean[]): Book[] {
+  return books
+    .filter((book) => !contradicts(book, answers))
+    .sort((a, b) => scoreBook(b, answers) - scoreBook(a, answers))
 }

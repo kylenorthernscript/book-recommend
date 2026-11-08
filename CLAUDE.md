@@ -3,13 +3,12 @@
 `reading-list-20.md` の20冊から、はい・いいえの5問で1冊を推薦する診断アプリ。Nuxt、Bulma、pnpm を使い、Netlifyで公開する。
 
 ## 現在の状況
+変化する状態はこのファイルに書かず、次の場所で確認する。
 
-2026-11-06時点。最新の経緯は `prompts/` の末尾を読む。
-
-- 公開済み：GitHub（https://github.com/kylenorthernscript/book-recommend、Public）とNetlify。NetlifyのサイトURLはこのファイルに未記録。
-- タグ：`prototype` は `ac14811`。動かさない。
-- 次の作業は未定。OpenSpecは初期化済みで、変更提案はまだない。
-- ライセンスはMITで、読書記録を含むリポジトリ全体に適用する。
+- 進行中の変更：`openspec/changes/`（`openspec list`）
+- 現在の仕様：`openspec/specs/`
+- タグ：`git tag`
+- 最新の経緯：`prompts/` の末尾
 
 ## 開発環境
 
