@@ -24,7 +24,13 @@ watch(answers, async () => {
         <h1 class="title is-3 mb-3">読書タイプ診断</h1>
         <p class="subtitle is-6">はい・いいえの5問で、20冊からあなたに合う1冊を選びます。</p>
       </header>
-      <ResultCard v-if="result" :book="result" @restart="answers = []" />
+      <ResultCard
+        v-if="result"
+        :book="result"
+        :questions="questions"
+        :answers="answers"
+        @restart="answers = []"
+      />
       <QuestionCard
         v-else
         :question="questions[answers.length]!"
